@@ -186,6 +186,16 @@ harness clear --scope project         # Delete all project entries (prompts "yes
 harness reset                         # Wipe everything — all scopes, all archives (prompts "reset")
 ```
 
+### Config
+
+```bash
+harness config show                          # View merged config (global + project)
+harness config set <key> <value>             # Set a global config value
+harness config set <key> <value> --scope project  # Set a project-level override
+harness config reset                         # Reset global config to defaults
+harness config reset --scope project         # Reset project config to defaults
+```
+
 ### Server / Daemon
 
 ```bash
@@ -257,15 +267,30 @@ When token count exceeds the threshold (default 8,000):
 
 ## Configuration
 
-No config file required. Defaults:
+Harness has two config files that layer on top of each other:
 
-| Setting | Default |
+| File | Scope |
 |---|---|
-| Token threshold | 8,000 |
-| Consolidation model | `claude-haiku-4-5` |
-| Archive on consolidate | `true` |
-| Personal dir | `~/.harness/personal/` |
-| Project dir | `.harness/project/` |
+| `~/.harness/config.json` | Global — applies to all projects |
+| `.harness/config.json` | Project — overrides global for this project |
+
+Neither file is required. If they don't exist, defaults are used.
+
+```bash
+harness config show                                          # view merged config
+harness config set consolidation.token_threshold 5000        # set globally
+harness config set consolidation.model claude-opus-4-7       # use a stronger model
+harness config set consolidation.archive false               # disable archiving globally
+harness config set consolidation.token_threshold 3000 --scope project  # project override
+harness config reset                                         # reset global to defaults
+harness config reset --scope project                         # reset project to defaults
+```
+
+| Key | Default | Description |
+|---|---|---|
+| `consolidation.token_threshold` | `8000` | Token count before auto-consolidation triggers |
+| `consolidation.model` | `claude-haiku-4-5` | AI model used for consolidation |
+| `consolidation.archive` | `true` | Archive entries before consolidating |
 
 Set `ANTHROPIC_API_KEY` to enable consolidation.
 

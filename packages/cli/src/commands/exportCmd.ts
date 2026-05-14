@@ -1,8 +1,8 @@
 import type { Command } from 'commander';
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore } from '@harness/core';
-import type { Scope } from '@harness/core';
+import { FileStore } from '@jonicodes/harness-core';
+import type { Scope } from '@jonicodes/harness-core';
 import { writeFile } from 'fs/promises';
 
 export function registerExport(program: Command): void {

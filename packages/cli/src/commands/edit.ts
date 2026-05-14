@@ -1,8 +1,8 @@
 import type { Command } from 'commander';
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore } from '@harness/core';
-import type { Scope } from '@harness/core';
+import { FileStore } from '@jonicodes/harness-core';
+import type { Scope } from '@jonicodes/harness-core';
 import { spawnSync } from 'child_process';
 import { writeFileSync, readFileSync } from 'fs';
 import { tmpdir } from 'os';

@@ -3,7 +3,7 @@ import { homedir } from 'os';
 import { join } from 'path';
 import { rm } from 'fs/promises';
 import { existsSync } from 'fs';
-import type { Scope } from '@harness/core';
+import type { Scope } from '@jonicodes/harness-core';
 import chalk from 'chalk';
 import * as readline from 'readline/promises';
 

@@ -1,7 +1,7 @@
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore, ConsolidationEngine, DEFAULT_CONFIG } from '@harness/core';
-import type { Scope } from '@harness/core';
+import { FileStore, ConsolidationEngine, DEFAULT_CONFIG } from '@jonicodes/harness-core';
+import type { Scope } from '@jonicodes/harness-core';
 
 interface ConsolidateArgs {
   scope?: Scope;

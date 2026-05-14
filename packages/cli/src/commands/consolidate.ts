@@ -1,8 +1,8 @@
 import type { Command } from 'commander';
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore, ConsolidationEngine, DEFAULT_CONFIG, countTokensForEntries } from '@harness/core';
-import type { Scope } from '@harness/core';
+import { FileStore, ConsolidationEngine, DEFAULT_CONFIG, countTokensForEntries } from '@jonicodes/harness-core';
+import type { Scope } from '@jonicodes/harness-core';
 import chalk from 'chalk';
 
 export function registerConsolidate(program: Command): void {

@@ -6,8 +6,8 @@ import {
   DEFAULT_CONFIG,
   resolveScope,
   isDuplicate,
-} from '@harness/core';
-import type { Scope } from '@harness/core';
+} from '@jonicodes/harness-core';
+import type { Scope } from '@jonicodes/harness-core';
 
 interface SaveArgs {
   content: string;

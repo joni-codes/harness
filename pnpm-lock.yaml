@@ -20,7 +20,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@harness/core':
+      '@jonicodes/harness-core':
         specifier: workspace:*
         version: link:../core
       chalk:
@@ -67,7 +67,7 @@ importers:
 
   packages/mcp-server:
     dependencies:
-      '@harness/core':
+      '@jonicodes/harness-core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':

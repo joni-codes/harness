@@ -1,7 +1,7 @@
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore } from '@harness/core';
-import type { Scope } from '@harness/core';
+import { FileStore } from '@jonicodes/harness-core';
+import type { Scope } from '@jonicodes/harness-core';
 
 interface ListArgs {
   scope?: Scope;

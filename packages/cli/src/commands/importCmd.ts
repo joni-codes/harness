@@ -2,8 +2,8 @@ import type { Command } from 'commander';
 import { homedir } from 'os';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
-import { FileStore } from '@harness/core';
-import type { Entry } from '@harness/core';
+import { FileStore } from '@jonicodes/harness-core';
+import type { Entry } from '@jonicodes/harness-core';
 import chalk from 'chalk';
 
 export function registerImport(program: Command): void {

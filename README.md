@@ -71,9 +71,9 @@ When your harness grows beyond **8,000 tokens**, it automatically consolidates u
 ## Installation
 
 ```bash
-npm install -g @harness/cli
+npm install -g @jonicodes/harness-cli
 # or
-pnpm add -g @harness/cli
+pnpm add -g @jonicodes/harness-cli
 ```
 
 > Requires Node.js 18+. Set `ANTHROPIC_API_KEY` in your environment for consolidation to work.

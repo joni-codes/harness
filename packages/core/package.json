@@ -25,5 +25,13 @@
     "@types/uuid": "^9.0.0",
     "typescript": "^5.4.0",
     "vitest": "^1.6.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

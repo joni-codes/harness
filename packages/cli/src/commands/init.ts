@@ -51,12 +51,11 @@ const PROVIDER_CONFIGS: Record<string, { name: string; configPath: (projectDir: 
   gemini: {
     name: 'Gemini CLI',
     configPath: (_projectDir: string) => join(homedir(), '.gemini', 'settings.json'),
-    config: (projectDir: string) => JSON.stringify({
+    config: (_projectDir: string) => JSON.stringify({
       mcpServers: {
         harness: {
           command: 'node',
-          args: [join(homedir(), '.harness', 'server', 'index.js')],
-          env: { HARNESS_PROJECT_DIR: projectDir }
+          args: [join(homedir(), '.harness', 'server', 'index.js')]
         }
       }
     }, null, 2)
@@ -64,12 +63,11 @@ const PROVIDER_CONFIGS: Record<string, { name: string; configPath: (projectDir: 
   windsurf: {
     name: 'Windsurf',
     configPath: (_projectDir: string) => join(homedir(), '.codeium', 'windsurf', 'mcp_config.json'),
-    config: (projectDir: string) => JSON.stringify({
+    config: (_projectDir: string) => JSON.stringify({
       mcpServers: {
         harness: {
           command: 'node',
-          args: [join(homedir(), '.harness', 'server', 'index.js')],
-          env: { HARNESS_PROJECT_DIR: projectDir }
+          args: [join(homedir(), '.harness', 'server', 'index.js')]
         }
       }
     }, null, 2)
@@ -124,7 +122,6 @@ const PROVIDER_CONFIGS: Record<string, { name: string; configPath: (projectDir: 
       (contextServers as Record<string, unknown>)['harness'] = {
         command: 'node',
         args: [join(homedir(), '.harness', 'server', 'index.js')],
-        env: { HARNESS_PROJECT_DIR: projectDir }
       };
       return JSON.stringify({ ...existing, context_servers: contextServers }, null, 2);
     }
@@ -145,12 +142,11 @@ mcp:
   'amazon-q': {
     name: 'Amazon Q Developer',
     configPath: (_projectDir: string) => join(homedir(), '.aws', 'amazonq', 'mcp.json'),
-    config: (projectDir: string) => JSON.stringify({
+    config: (_projectDir: string) => JSON.stringify({
       mcpServers: {
         harness: {
           command: 'node',
-          args: [join(homedir(), '.harness', 'server', 'index.js')],
-          env: { HARNESS_PROJECT_DIR: projectDir }
+          args: [join(homedir(), '.harness', 'server', 'index.js')]
         }
       }
     }, null, 2)
@@ -158,12 +154,11 @@ mcp:
   jetbrains: {
     name: 'JetBrains AI',
     configPath: (_projectDir: string) => join(homedir(), '.config', 'JetBrains', 'mcp.json'),
-    config: (projectDir: string) => JSON.stringify({
+    config: (_projectDir: string) => JSON.stringify({
       mcpServers: {
         harness: {
           command: 'node',
-          args: [join(homedir(), '.harness', 'server', 'index.js')],
-          env: { HARNESS_PROJECT_DIR: projectDir }
+          args: [join(homedir(), '.harness', 'server', 'index.js')]
         }
       }
     }, null, 2)

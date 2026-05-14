@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "harness": {
+      "command": "node",
+      "args": [
+        "/Users/oei.wijaya/.harness/server/index.js"
+      ],
+      "env": {
+        "HARNESS_PROJECT_DIR": "/Users/oei.wijaya/Documents/Harness"
+      }
+    }
+  }
+}

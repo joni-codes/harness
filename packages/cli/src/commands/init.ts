@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, appendFileSync } from 'fs';
 import { homedir } from 'os';
 import { join, resolve } from 'path';
 import { installLaunchd } from '../daemon/launchd.js';
@@ -182,6 +182,53 @@ function ensureDir(dir: string): void {
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
 }
 
+const HARNESS_INSTRUCTIONS = `
+## Harness — AI Memory
+
+You have access to the Harness MCP server. Follow these rules without exception:
+
+1. Call \`harness_context\` at the start of every session to load saved knowledge. Always pass \`project_dir\` as the absolute path of the current project.
+2. Call \`harness_save\` silently (no announcement) when the user:
+   - Corrects your behavior ("don't do X", "always use Y")
+   - States a preference ("I prefer...", "use X not Y")
+   - Explains how this project works ("our API uses...", "in this repo we...")
+   - Gives any feedback you should remember across sessions
+3. Never ask permission before saving. Just save and continue.
+4. Always pass \`project_dir\` as the current project's absolute path in every tool call.
+`.trim();
+
+const PROVIDER_INSTRUCTIONS: Record<string, (projectDir: string) => { path: string; format: 'markdown' | 'rules' }> = {
+  'claude-code': (projectDir) => ({ path: join(projectDir, 'CLAUDE.md'), format: 'markdown' }),
+  cursor: (projectDir) => ({ path: join(projectDir, '.cursor', 'rules', 'harness.mdc'), format: 'rules' }),
+  vscode: (projectDir) => ({ path: join(projectDir, '.github', 'copilot-instructions.md'), format: 'markdown' }),
+  gemini: (projectDir) => ({ path: join(projectDir, 'GEMINI.md'), format: 'markdown' }),
+  windsurf: (projectDir) => ({ path: join(projectDir, '.windsurfrules'), format: 'markdown' }),
+};
+
+function injectInstructions(provider: string, projectDir: string): string | null {
+  const spec = PROVIDER_INSTRUCTIONS[provider];
+  if (!spec) return null;
+
+  const { path, format } = spec(projectDir);
+  const dir = path.substring(0, path.lastIndexOf('/'));
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+
+  const marker = '<!-- harness-instructions -->';
+  const block = format === 'rules'
+    ? `---\ndescription: Harness AI memory rules\nalwaysApply: true\n---\n\n${HARNESS_INSTRUCTIONS}\n`
+    : `${marker}\n${HARNESS_INSTRUCTIONS}\n${marker}\n`;
+
+  if (existsSync(path)) {
+    const existing = readFileSync(path, 'utf-8');
+    if (existing.includes(marker) || existing.includes('harness_context')) return path;
+    appendFileSync(path, '\n\n' + block);
+  } else {
+    writeFileSync(path, block, 'utf-8');
+  }
+  return path;
+}
+
+
 function installDaemon(): void {
   const platform = process.platform;
   const serverBin = join(homedir(), '.harness', 'server', 'index.js');
@@ -234,6 +281,10 @@ export function registerInit(program: Command): void {
         ensureDir(configDir);
         writeFileSync(configPath, provider.config(projectDir), 'utf-8');
         console.log(chalk.green('✓') + ` ${provider.name} config: ` + chalk.cyan(configPath));
+        const instrPath = injectInstructions(providerKey, projectDir);
+        if (instrPath) {
+          console.log(chalk.green('✓') + ' AI instructions: ' + chalk.cyan(instrPath));
+        }
       } else {
         console.log(chalk.dim('  No provider specified. Run `harness init --provider <name>` to configure a specific AI provider.'));
         console.log(chalk.dim(`  Available: ${Object.keys(PROVIDER_CONFIGS).join(', ')}`));

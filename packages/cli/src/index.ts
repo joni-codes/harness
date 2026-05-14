@@ -15,6 +15,7 @@ import { registerExport } from './commands/exportCmd.js';
 import { registerImport } from './commands/importCmd.js';
 import { registerServerCommands } from './commands/server.js';
 import { registerInit } from './commands/init.js';
+import { registerConfig } from './commands/config.js';
 
 const program = new Command();
 
@@ -24,6 +25,7 @@ program
   .version('0.1.0');
 
 registerInit(program);
+registerConfig(program);
 registerSave(program);
 registerList(program);
 registerShow(program);

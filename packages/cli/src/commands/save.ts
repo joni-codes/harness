@@ -1,7 +1,8 @@
 import type { Command } from 'commander';
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore, resolveScope, isDuplicate, ConsolidationEngine, DEFAULT_CONFIG } from '@jonicodes/harness-core';
+import { FileStore, resolveScope, isDuplicate, ConsolidationEngine } from '@jonicodes/harness-core';
+import { loadConfig } from '@jonicodes/harness-core';
 import type { Scope } from '@jonicodes/harness-core';
 import chalk from 'chalk';
 
@@ -15,7 +16,7 @@ export function registerSave(program: Command): void {
       const scope = resolveScope(content, opts.scope as Scope | undefined);
       const baseDir = scope === 'personal' ? join(homedir(), '.harness') : join(process.cwd(), '.harness');
       const store = new FileStore(baseDir);
-      const engine = new ConsolidationEngine(store, DEFAULT_CONFIG);
+      const engine = new ConsolidationEngine(store, loadConfig(process.cwd()));
 
       const index = await store.loadIndex(scope);
       if (isDuplicate(content, index.map(i => i.summary))) {

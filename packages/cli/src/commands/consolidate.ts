@@ -1,7 +1,8 @@
 import type { Command } from 'commander';
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore, ConsolidationEngine, DEFAULT_CONFIG, countTokensForEntries } from '@jonicodes/harness-core';
+import { FileStore, ConsolidationEngine, countTokensForEntries } from '@jonicodes/harness-core';
+import { loadConfig } from '@jonicodes/harness-core';
 import type { Scope } from '@jonicodes/harness-core';
 import chalk from 'chalk';
 
@@ -24,7 +25,7 @@ export function registerConsolidate(program: Command): void {
 
         if (opts.dryRun) { console.log(chalk.yellow('Dry run — no changes.')); continue; }
 
-        const engine = new ConsolidationEngine(store, DEFAULT_CONFIG);
+        const engine = new ConsolidationEngine(store, loadConfig(process.cwd()));
         await engine.consolidate(scope, baseDir);
         console.log(chalk.green('Consolidated.'));
       }

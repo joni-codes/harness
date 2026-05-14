@@ -1,6 +1,7 @@
 import { homedir } from 'os';
 import { join } from 'path';
-import { FileStore, ConsolidationEngine, DEFAULT_CONFIG } from '@jonicodes/harness-core';
+import { FileStore, ConsolidationEngine } from '@jonicodes/harness-core';
+import { loadConfig } from '@jonicodes/harness-core';
 import type { Scope } from '@jonicodes/harness-core';
 
 interface ConsolidateArgs {
@@ -12,7 +13,7 @@ export async function handleHarnessConsolidate(args: ConsolidateArgs, projectDir
   for (const scope of scopes) {
     const baseDir = scope === 'personal' ? join(homedir(), '.harness') : join(projectDir, '.harness');
     const store = new FileStore(baseDir);
-    const engine = new ConsolidationEngine(store, DEFAULT_CONFIG);
+    const engine = new ConsolidationEngine(store, loadConfig(projectDir));
     await engine.consolidate(scope, baseDir);
   }
   return JSON.stringify({ status: 'consolidated', scopes });

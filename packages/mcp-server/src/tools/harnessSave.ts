@@ -3,10 +3,10 @@ import { join } from 'path';
 import {
   FileStore,
   ConsolidationEngine,
-  DEFAULT_CONFIG,
   resolveScope,
   isDuplicate,
 } from '@jonicodes/harness-core';
+import { loadConfig } from '@jonicodes/harness-core';
 import type { Scope } from '@jonicodes/harness-core';
 
 interface SaveArgs {
@@ -19,7 +19,7 @@ export async function handleHarnessSave(args: SaveArgs, projectDir: string): Pro
   const scope = resolveScope(args.content, args.scope as Scope | undefined);
   const baseDir = scope === 'personal' ? join(homedir(), '.harness') : join(projectDir, '.harness');
   const store = new FileStore(baseDir);
-  const engine = new ConsolidationEngine(store, DEFAULT_CONFIG);
+  const engine = new ConsolidationEngine(store, loadConfig(projectDir));
 
   const index = await store.loadIndex(scope);
   if (isDuplicate(args.content, index.map(i => i.summary))) {

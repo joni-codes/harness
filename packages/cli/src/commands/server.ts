@@ -3,15 +3,13 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 import { homedir } from 'os';
-import { fileURLToPath } from 'url';
 import { installLaunchd, uninstallLaunchd, statusLaunchd } from '../daemon/launchd.js';
 import { installSystemd, uninstallSystemd, statusSystemd } from '../daemon/systemd.js';
 import { installWindowsService, uninstallWindowsService, statusWindowsService } from '../daemon/windowsService.js';
 import chalk from 'chalk';
 
 function getServerBin(): string {
-  const dir = fileURLToPath(new URL('.', import.meta.url));
-  return join(dir, '..', '..', '..', '..', 'node_modules', '.bin', 'harness-server');
+  return join(homedir(), '.harness', 'server', 'index.js');
 }
 
 async function install(serverBin: string): Promise<void> {

@@ -7,10 +7,20 @@ import { execSync } from 'child_process';
 const PLIST_LABEL = 'com.harness.server';
 const PLIST_PATH = join(homedir(), 'Library', 'LaunchAgents', `${PLIST_LABEL}.plist`);
 
+function getNodePath(): string {
+  try {
+    return execSync('which node', { encoding: 'utf8' }).trim();
+  } catch {
+    return 'node';
+  }
+}
+
 export async function installLaunchd(serverBin: string): Promise<void> {
   const harnessDir = join(homedir(), '.harness');
   await mkdir(join(homedir(), 'Library', 'LaunchAgents'), { recursive: true });
   await mkdir(harnessDir, { recursive: true });
+
+  const nodePath = getNodePath();
 
   const plist = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -18,7 +28,10 @@ export async function installLaunchd(serverBin: string): Promise<void> {
 <dict>
   <key>Label</key><string>${PLIST_LABEL}</string>
   <key>ProgramArguments</key>
-  <array><string>${serverBin}</string></array>
+  <array>
+    <string>${nodePath}</string>
+    <string>${serverBin}</string>
+  </array>
   <key>EnvironmentVariables</key>
   <dict>
     <key>HARNESS_PROJECT_DIR</key><string>${process.cwd()}</string>
@@ -31,6 +44,9 @@ export async function installLaunchd(serverBin: string): Promise<void> {
 </plist>`;
 
   await writeFile(PLIST_PATH, plist, 'utf8');
+  try {
+    execSync(`launchctl unload ${PLIST_PATH} 2>/dev/null || true`);
+  } catch { /* ignore */ }
   execSync(`launchctl load ${PLIST_PATH}`);
 }
 
